@@ -3,6 +3,8 @@ using UnityEngine;
 using UnityEngine.Audio;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Linq;
 
 namespace com.thelegends.sound.manager.Editor
 {
@@ -103,8 +105,13 @@ namespace com.thelegends.sound.manager.Editor
                     // Merge with existing addresses if there are any, preserving custom settings
                     MergeAddresses(_settings.SoundAddresses, addresses);
                     
+                    // Automatically generate sound key constants after scanning
+                    GenerateSoundKeysConstants(_settings.SoundAddresses);
+                    
                     EditorUtility.SetDirty(_settings);
                     AssetDatabase.SaveAssets();
+                    
+                    Debug.Log("Addressables scan complete and Sound Keys constants file generated successfully!");
                 }
             }
             
@@ -199,6 +206,95 @@ namespace com.thelegends.sound.manager.Editor
                 
                 EditorGUILayout.EndVertical();
             }
+        }
+
+        /// <summary>
+        /// Generates a C# file with constants for all sound keys
+        /// </summary>
+        private void GenerateSoundKeysConstants(List<SoundAddress> soundAddresses)
+        {
+            if (soundAddresses == null || soundAddresses.Count == 0)
+            {
+                Debug.LogWarning("No sound addresses to generate constants for.");
+                return;
+            }
+
+            string directory = "Assets/TripSoft/SoundManager";
+            
+            // Create folder if it doesn't exist
+            if (!AssetDatabase.IsValidFolder(directory))
+            {
+                string parentFolder = Path.GetDirectoryName(directory).Replace('\\', '/');
+                string folderName = Path.GetFileName(directory);
+                
+                if (!AssetDatabase.IsValidFolder(parentFolder))
+                {
+                    AssetDatabase.CreateFolder("Assets", "TripSoft");
+                }
+                
+                AssetDatabase.CreateFolder(parentFolder, folderName);
+            }
+            
+            // Create the constants file content
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("// This file is auto-generated. Do not modify manually.");
+            sb.AppendLine("using System;");
+            sb.AppendLine();
+            sb.AppendLine("namespace com.thelegends.sound.manager");
+            sb.AppendLine("{");
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine("    /// Constants for Sound Keys to use with SoundManager");
+            sb.AppendLine("    /// </summary>");
+            sb.AppendLine("    public static class SoundKeys");
+            sb.AppendLine("    {");
+            
+            // Add special constant for controlling background music
+            sb.AppendLine();
+            sb.AppendLine("        #region Special Sound IDs");
+            sb.AppendLine("        /// <summary>Special ID for controlling the currently playing background music</summary>");
+            sb.AppendLine("        /// <remarks>Use with Pause(), Resume(), Stop(), etc. methods - NOT with Play()</remarks>");
+            sb.AppendLine("        public const string MUSIC = \"music\";");
+            sb.AppendLine("        #endregion");
+
+            // Group addresses by channel type for better organization
+            Dictionary<AudioChannelType, List<SoundAddress>> groupedAddresses = new Dictionary<AudioChannelType, List<SoundAddress>>();
+            
+            foreach (var address in soundAddresses)
+            {
+                if (!groupedAddresses.ContainsKey(address.ChannelType))
+                {
+                    groupedAddresses[address.ChannelType] = new List<SoundAddress>();
+                }
+                
+                groupedAddresses[address.ChannelType].Add(address);
+            }
+
+            // Output constants by category
+            foreach (var channelType in groupedAddresses.Keys)
+            {
+                sb.AppendLine();
+                sb.AppendLine($"        #region {channelType}");
+
+                foreach (var address in groupedAddresses[channelType].OrderBy(a => a.Key))
+                {
+                    // Convert key to valid C# identifier (replace slashes with underscores)
+                    string constantName = address.Key.Replace('/', '_').Replace('-', '_').ToUpperInvariant();
+                    sb.AppendLine($"        /// <summary>Addressable key for {address.Key}</summary>");
+                    sb.AppendLine($"        public const string {constantName} = \"{address.Key}\";");
+                }
+
+                sb.AppendLine($"        #endregion");
+            }
+
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+
+            // Write to file
+            string filePath = $"{directory}/SoundKeys.cs";
+            File.WriteAllText(filePath, sb.ToString());
+            AssetDatabase.Refresh();
+            
+            Debug.Log($"Generated sound key constants at {filePath}");
         }
 
         /// <summary>
