@@ -6,7 +6,11 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     public void PlayMusic() {
-        SoundManager.Instance.Play(SoundKeys.MUSIC_GAMEPLAYMUSIC, 1, true, 1);
+        SoundManager.Instance.Play(SoundKeys.MUSIC_GAMEPLAYMUSIC, 1, true, 3);
+    }
+
+    public void PlayMainMenuMusic() {
+        SoundManager.Instance.Play(SoundKeys.MUSIC_MAINMENU, 1, true, 3);
     }
 
     public void PlaySfx1() {

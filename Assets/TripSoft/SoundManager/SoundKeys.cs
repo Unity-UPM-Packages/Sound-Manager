@@ -18,6 +18,8 @@ namespace com.thelegends.sound.manager
         #region Music
         /// <summary>Addressable key for music/GamePlayMusic</summary>
         public const string MUSIC_GAMEPLAYMUSIC = "music/GamePlayMusic";
+        /// <summary>Addressable key for music/MainMenu</summary>
+        public const string MUSIC_MAINMENU = "music/MainMenu";
         #endregion
 
         #region Vfx

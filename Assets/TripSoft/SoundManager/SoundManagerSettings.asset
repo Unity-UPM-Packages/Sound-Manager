@@ -25,6 +25,10 @@ MonoBehaviour:
     ChannelType: 1
     Address: music/GamePlayMusic
     VolumeScale: 1
+  - Key: music/MainMenu
+    ChannelType: 1
+    Address: music/MainMenu
+    VolumeScale: 1
   - Key: vfx/PunchSFX
     ChannelType: 2
     Address: vfx/PunchSFX
