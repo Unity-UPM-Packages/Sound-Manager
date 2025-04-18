@@ -111,6 +111,7 @@ namespace com.thelegends.sound.manager
                     continue;
                     
                 AudioMixerGroup mixerGroup = _mixerController.GetGroupByChannel(channelType);
+                
                 if (mixerGroup != null)
                 {
                     // Create a child GameObject for each pool
@@ -125,12 +126,7 @@ namespace com.thelegends.sound.manager
                 }
             }
             
-            // Initialize volumes directly through mixer controller instead of using SetVolume()
-            // This avoids the dependency on _isInitialized when setting up initial volumes
-            _mixerController.SetVolume(AudioChannelType.Master, settings.DefaultMasterVolume);
-            _mixerController.SetVolume(AudioChannelType.Music, settings.DefaultMusicVolume);
-            _mixerController.SetVolume(AudioChannelType.Vfx, settings.DefaultVfxVolume);
-            _mixerController.SetVolume(AudioChannelType.UI, settings.DefaultUIVolume);
+            
             
             // Preload addressables if configured to do so
             if (settings.PreloadAddressables && settings.SoundAddresses != null)
@@ -145,6 +141,32 @@ namespace com.thelegends.sound.manager
             _isInitialized = true;
             
             Log("SoundManager initialized successfully.");
+        }
+
+        void Start()
+        {
+            // Check for volume values in PlayerPrefs first, otherwise use defaults
+            LoadVolumesFromPlayerPrefs();
+        }
+
+        /// <summary>
+        /// Loads volume values from PlayerPrefs, or uses defaults if not found
+        /// </summary>
+        private void LoadVolumesFromPlayerPrefs()
+        {
+            // Kiểm tra volume từ PlayerPrefs, nếu không có thì dùng giá trị mặc định
+            float masterVolume = PlayerPrefs.GetFloat("SoundManager_MasterVolume", _settings.DefaultMasterVolume);
+            float musicVolume = PlayerPrefs.GetFloat("SoundManager_MusicVolume", _settings.DefaultMusicVolume);
+            float vfxVolume = PlayerPrefs.GetFloat("SoundManager_VfxVolume", _settings.DefaultVfxVolume);
+            float uiVolume = PlayerPrefs.GetFloat("SoundManager_UIVolume", _settings.DefaultUIVolume);
+            
+            // Thiết lập volume cho các kênh
+            _mixerController.SetVolume(AudioChannelType.Master, masterVolume);
+            _mixerController.SetVolume(AudioChannelType.Music, musicVolume);
+            _mixerController.SetVolume(AudioChannelType.Vfx, vfxVolume);
+            _mixerController.SetVolume(AudioChannelType.UI, uiVolume);
+            
+            Log($"Loaded volumes from PlayerPrefs - Master: {masterVolume}, Music: {musicVolume}, VFX: {vfxVolume}, UI: {uiVolume}");
         }
 
         /// <summary>
