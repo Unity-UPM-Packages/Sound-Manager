@@ -1,0 +1,16 @@
+{
+    "name": "com.thelegends.sound.manager.Demo",
+    "rootNamespace": "com.thelegends.sound.manager.Demo",
+    "references": [
+        "com.thelegends.sound.manager"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -1,0 +1,18 @@
+{
+    "name": "com.thelegends.sound.manager.Editor",
+    "rootNamespace": "com.thelegends.sound.manager.Editor",
+    "references": [
+        "com.thelegends.sound.manager"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
