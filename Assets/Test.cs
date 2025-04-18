@@ -6,29 +6,24 @@ using UnityEngine;
 public class Test : MonoBehaviour
 {
     public void PlayMusic() {
-        SoundManager.Instance.Play("music/GamePlayMusic",1,true,1);
+        SoundManager.Instance.Play(SoundKeys.MUSIC_GAMEPLAYMUSIC, 1, true, 1);
     }
 
     public void PlaySfx1() {
-        SoundManager.Instance.PlayOneShot("vfx/PunchSFX");   
-        SoundManager.Instance.PlayOneShot("vfx/PunchSFX");   
-        SoundManager.Instance.PlayOneShot("vfx/PunchSFX");   
-        SoundManager.Instance.PlayOneShot("vfx/PunchSFX");   
-        SoundManager.Instance.PlayOneShot("vfx/PunchSFX");   
-
+        SoundManager.Instance.PlayOneShot(SoundKeys.VFX_PUNCHSFX);
     }
 
     public void PlaySfx2() {
-        SoundManager.Instance.PlayOneShot("ui/Button_Click");
+        SoundManager.Instance.PlayOneShot(SoundKeys.UI_BUTTON_CLICK);
     }
 
     public void PauseMUsic() {
-        SoundManager.Instance.Pause("music/GamePlayMusic");
+        SoundManager.Instance.Pause(SoundKeys.MUSIC);  // Sử dụng hằng số MUSIC
     }
     public void ResumeMusic() {
-        SoundManager.Instance.Resume("music/GamePlayMusic");
+        SoundManager.Instance.Resume(SoundKeys.MUSIC); // Sử dụng hằng số MUSIC
     }
     public void StopMusic() {
-        SoundManager.Instance.Stop("music/GamePlayMusic");
+        SoundManager.Instance.Stop(SoundKeys.MUSIC);   // Sử dụng hằng số MUSIC
     }
 }

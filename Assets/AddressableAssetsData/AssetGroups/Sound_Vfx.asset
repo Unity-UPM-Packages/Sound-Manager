@@ -17,7 +17,7 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: b9790a340a55c414f8aa0aeb2d0c7960
   m_SerializeEntries:
-  - m_GUID: a18be2893645ed94e8e1aae665264041
+  - m_GUID: cc3fdbd35cb3fb240b6462b0d6141de1
     m_Address: vfx/PunchSFX
     m_ReadOnly: 0
     m_SerializedLabels: []
