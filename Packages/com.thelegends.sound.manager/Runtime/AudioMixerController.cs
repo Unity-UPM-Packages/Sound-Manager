@@ -10,16 +10,6 @@ namespace com.thelegends.sound.manager
     /// </summary>
     public class AudioMixerController
     {
-        private const string MasterVolumeParam = "MasterVolume";
-        private const string MusicVolumeParam = "MusicVolume";
-        private const string VfxVolumeParam = "VfxVolume";
-        private const string UIVolumeParam = "UIVolume";
-        
-        private const string MasterGroupName = "Master";
-        private const string MusicGroupName = "Music";
-        private const string VfxGroupName = "Vfx";
-        private const string UIGroupName = "UI";
-        
         private readonly AudioMixer _audioMixer;
         private readonly Dictionary<AudioChannelType, AudioMixerGroup> _mixerGroups;
         private readonly Dictionary<AudioChannelType, float> _volumeCache = new Dictionary<AudioChannelType, float>();
@@ -54,16 +44,16 @@ namespace com.thelegends.sound.manager
             {
                 switch (group.name)
                 {
-                    case MasterGroupName:
+                    case AudioConstants.GROUP_MASTER:
                         _mixerGroups[AudioChannelType.Master] = group;
                         break;
-                    case MusicGroupName:
+                    case AudioConstants.GROUP_MUSIC:
                         _mixerGroups[AudioChannelType.Music] = group;
                         break;
-                    case VfxGroupName:
+                    case AudioConstants.GROUP_VFX:
                         _mixerGroups[AudioChannelType.Vfx] = group;
                         break;
-                    case UIGroupName:
+                    case AudioConstants.GROUP_UI:
                         _mixerGroups[AudioChannelType.UI] = group;
                         break;
                 }
@@ -104,11 +94,11 @@ namespace com.thelegends.sound.manager
             // Avoid -infinity when volume is 0
             float dbVolume = volume > 0.0001f ? Mathf.Log10(volume) * 20 : -80f;
             
-            string paramName = GetVolumeParamName(channelType);
+            string paramName = AudioConstants.GetMixerParam(channelType);
             _audioMixer.SetFloat(paramName, dbVolume);
             
             // Save to player prefs for persistence
-            PlayerPrefs.SetFloat($"SoundManager_{paramName}", volume);
+            PlayerPrefs.SetFloat(AudioConstants.GetPrefsKey(channelType), volume);
             PlayerPrefs.Save();
         }
         
@@ -135,12 +125,13 @@ namespace com.thelegends.sound.manager
         /// <returns>Volume from 0 (mute) to 1 (full volume)</returns>
         private float GetVolumeFromMixer(AudioChannelType channelType)
         {
-            string paramName = GetVolumeParamName(channelType);
+            string paramName = AudioConstants.GetMixerParam(channelType);
+            string prefsKey = AudioConstants.GetPrefsKey(channelType);
             
             // Try to get from PlayerPrefs first
-            if (PlayerPrefs.HasKey($"SoundManager_{paramName}"))
+            if (PlayerPrefs.HasKey(prefsKey))
             {
-                float volume = PlayerPrefs.GetFloat($"SoundManager_{paramName}", 1f);
+                float volume = PlayerPrefs.GetFloat(prefsKey, 1f);
                 
                 // Also make sure the mixer has this value
                 float dbVolume = volume > 0.0001f ? Mathf.Log10(volume) * 20 : -80f;
@@ -180,26 +171,6 @@ namespace com.thelegends.sound.manager
             {
                 SetVolume(channelType, 0f);
                 return true;
-            }
-        }
-        
-        /// <summary>
-        /// Gets the parameter name used in the AudioMixer for volume control
-        /// </summary>
-        private string GetVolumeParamName(AudioChannelType channelType)
-        {
-            switch (channelType)
-            {
-                case AudioChannelType.Master:
-                    return MasterVolumeParam;
-                case AudioChannelType.Music:
-                    return MusicVolumeParam;
-                case AudioChannelType.Vfx:
-                    return VfxVolumeParam;
-                case AudioChannelType.UI:
-                    return UIVolumeParam;
-                default:
-                    return MasterVolumeParam;
             }
         }
     }

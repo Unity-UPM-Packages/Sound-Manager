@@ -154,13 +154,13 @@ namespace com.thelegends.sound.manager
         /// </summary>
         private void LoadVolumesFromPlayerPrefs()
         {
-            // Kiểm tra volume từ PlayerPrefs, nếu không có thì dùng giá trị mặc định
-            float masterVolume = PlayerPrefs.GetFloat("SoundManager_MasterVolume", _settings.DefaultMasterVolume);
-            float musicVolume = PlayerPrefs.GetFloat("SoundManager_MusicVolume", _settings.DefaultMusicVolume);
-            float vfxVolume = PlayerPrefs.GetFloat("SoundManager_VfxVolume", _settings.DefaultVfxVolume);
-            float uiVolume = PlayerPrefs.GetFloat("SoundManager_UIVolume", _settings.DefaultUIVolume);
+            // Check volume values from PlayerPrefs, use defaults if not found
+            float masterVolume = PlayerPrefs.GetFloat(AudioConstants.PREFS_MASTER_VOLUME, _settings.DefaultMasterVolume);
+            float musicVolume = PlayerPrefs.GetFloat(AudioConstants.PREFS_MUSIC_VOLUME, _settings.DefaultMusicVolume);
+            float vfxVolume = PlayerPrefs.GetFloat(AudioConstants.PREFS_VFX_VOLUME, _settings.DefaultVfxVolume);
+            float uiVolume = PlayerPrefs.GetFloat(AudioConstants.PREFS_UI_VOLUME, _settings.DefaultUIVolume);
             
-            // Thiết lập volume cho các kênh
+            // Set volume levels for each channel
             _mixerController.SetVolume(AudioChannelType.Master, masterVolume);
             _mixerController.SetVolume(AudioChannelType.Music, musicVolume);
             _mixerController.SetVolume(AudioChannelType.Vfx, vfxVolume);

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using com.thelegends.sound.manager;
+using System.Collections;
 
 public class AudioMixerTest : MonoBehaviour
 {
@@ -11,7 +12,12 @@ public class AudioMixerTest : MonoBehaviour
     
     private void Start()
     {
-        // Khởi tạo giá trị slider từ SoundManager
+       StartCoroutine(A());
+    }
+
+    private IEnumerator A() {
+        yield return new WaitForEndOfFrame();
+         // Khởi tạo giá trị slider từ SoundManager
         masterVolumeSlider.value = SoundManager.Instance.GetVolume(AudioChannelType.Master);
         musicVolumeSlider.value = SoundManager.Instance.GetVolume(AudioChannelType.Music);
         vfxVolumeSlider.value = SoundManager.Instance.GetVolume(AudioChannelType.Vfx);
