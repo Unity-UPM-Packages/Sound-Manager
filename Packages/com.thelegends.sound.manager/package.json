@@ -19,5 +19,12 @@
   },
   "dependencies": {
     "com.thelegends.unity.patterns": "1.0.1"
-  }
+  },
+  "samples": [
+    {
+      "displayName": "Sound Manager Demo",
+      "description": "Example of using Sound Manager with Addressables",
+      "path": "Samples~/Demo"
+    }
+  ]
 }

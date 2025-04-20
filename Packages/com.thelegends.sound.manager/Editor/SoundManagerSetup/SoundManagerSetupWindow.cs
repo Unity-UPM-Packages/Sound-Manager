@@ -157,7 +157,7 @@ namespace com.thelegends.sound.manager.Editor
                     
                     // Column headers
                     EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Key", EditorStyles.boldLabel, GUILayout.Width(200));
+                    EditorGUILayout.LabelField("Address", EditorStyles.boldLabel, GUILayout.Width(200));
                     EditorGUILayout.LabelField("Type", EditorStyles.boldLabel, GUILayout.Width(60));
                     EditorGUILayout.LabelField("Volume", EditorStyles.boldLabel, GUILayout.Width(60));
                     EditorGUILayout.EndHorizontal();
@@ -175,15 +175,14 @@ namespace com.thelegends.sound.manager.Editor
                             
                         // Check if it matches search (if any)
                         bool matchesSearch = string.IsNullOrEmpty(_searchFilter) || 
-                            address.Key.ToLower().Contains(_searchFilter.ToLower());
+                            address.Address.ToLower().Contains(_searchFilter.ToLower());
                             
                         if (showByType && matchesSearch)
                         {
                             EditorGUILayout.BeginHorizontal();
                             
-                            // Show key (with tooltip for address)
-                            EditorGUILayout.LabelField(new GUIContent(address.Key, address.Address), 
-                                GUILayout.Width(200));
+                            // Show address
+                            EditorGUILayout.LabelField(address.Address, GUILayout.Width(200));
                             
                             // Show channel type
                             EditorGUILayout.LabelField(address.ChannelType.ToString(), GUILayout.Width(60));
@@ -275,12 +274,12 @@ namespace com.thelegends.sound.manager.Editor
                 sb.AppendLine();
                 sb.AppendLine($"        #region {channelType}");
 
-                foreach (var address in groupedAddresses[channelType].OrderBy(a => a.Key))
+                foreach (var address in groupedAddresses[channelType].OrderBy(a => a.Address))
                 {
-                    // Convert key to valid C# identifier (replace slashes with underscores)
-                    string constantName = address.Key.Replace('/', '_').Replace('-', '_').ToUpperInvariant();
-                    sb.AppendLine($"        /// <summary>Addressable key for {address.Key}</summary>");
-                    sb.AppendLine($"        public const string {constantName} = \"{address.Key}\";");
+                    // Convert address to valid C# identifier (replace slashes with underscores)
+                    string constantName = address.Address.Replace('/', '_').Replace('-', '_').ToUpperInvariant();
+                    sb.AppendLine($"        /// <summary>Addressable key for {address.Address}</summary>");
+                    sb.AppendLine($"        public const string {constantName} = \"{address.Address}\";");
                 }
 
                 sb.AppendLine($"        #endregion");
@@ -302,11 +301,11 @@ namespace com.thelegends.sound.manager.Editor
         /// </summary>
         private void MergeAddresses(List<SoundAddress> existing, List<SoundAddress> newAddresses)
         {
-            // Create a dictionary of existing addresses by key for quick lookup
+            // Create a dictionary of existing addresses by address for quick lookup
             Dictionary<string, SoundAddress> existingDict = new Dictionary<string, SoundAddress>();
             foreach (var address in existing)
             {
-                existingDict[address.Key] = address;
+                existingDict[address.Address] = address;
             }
             
             // Create the merged list
@@ -315,7 +314,7 @@ namespace com.thelegends.sound.manager.Editor
             // Add all new addresses, preserving settings from existing ones where applicable
             foreach (var newAddress in newAddresses)
             {
-                if (existingDict.TryGetValue(newAddress.Key, out SoundAddress existingAddress))
+                if (existingDict.TryGetValue(newAddress.Address, out SoundAddress existingAddress))
                 {
                     // Preserve volume scale but update address (in case path changed)
                     newAddress.VolumeScale = existingAddress.VolumeScale;
