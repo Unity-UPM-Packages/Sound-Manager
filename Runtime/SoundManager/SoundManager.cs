@@ -13,25 +13,6 @@ namespace com.thelegends.sound.manager
     /// </summary>
     public class SoundManager : PersistentMonoSingleton<SoundManager>
     {
-        private static SoundManager _instance;
-        
-        /// <summary>
-        /// The singleton instance of SoundManager
-        /// </summary>
-        public static SoundManager Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    GameObject go = new GameObject("SoundManager");
-                    _instance = go.AddComponent<SoundManager>();
-                    DontDestroyOnLoad(go);
-                }
-                return _instance;
-            }
-        }
-        
         [SerializeField] private AudioMixer _audioMixer;
         [SerializeField] private SoundManagerSettings _settings;
         
@@ -52,24 +33,10 @@ namespace com.thelegends.sound.manager
         /// Event raised when a sound stops playing
         /// </summary>
         public event Action<string, AudioChannelType> OnSoundStopped;
-        
-        
-        /// <summary>
-        /// Whether the SoundManager is initialized
-        /// </summary>
-        public bool IsInitialized => _isInitialized;
 
-        private void Awake()
+
+        protected override void Awake()
         {
-            if (_instance != null && _instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-            
-            _instance = this;
-            DontDestroyOnLoad(gameObject);
-            
             if (_audioMixer != null && _settings != null)
             {
                 Initialize(_audioMixer, _settings);
@@ -130,7 +97,7 @@ namespace com.thelegends.sound.manager
             {
                 foreach (var address in settings.SoundAddresses)
                 {
-                    _addressableLoader.PreloadClip(address.Key);
+                    _addressableLoader.PreloadClip(address.Address);
                 }
             }
             
@@ -665,12 +632,5 @@ namespace com.thelegends.sound.manager
             }
         }
         
-        /// <summary>
-        /// Check for duplicating singleton instances
-        /// </summary>
-        private void OnApplicationQuit()
-        {
-            _instance = null;
-        }
     }
 }
