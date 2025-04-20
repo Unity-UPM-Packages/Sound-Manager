@@ -21,20 +21,16 @@ MonoBehaviour:
   MaxConcurrentSounds: 32
   PreloadAddressables: 0
   SoundAddresses:
-  - Key: music/GamePlayMusic
-    ChannelType: 1
+  - ChannelType: 1
     Address: music/GamePlayMusic
     VolumeScale: 1
-  - Key: music/MainMenu
-    ChannelType: 1
+  - ChannelType: 1
     Address: music/MainMenu
     VolumeScale: 1
-  - Key: vfx/PunchSFX
-    ChannelType: 2
+  - ChannelType: 2
     Address: vfx/PunchSFX
     VolumeScale: 1
-  - Key: ui/Button_Click
-    ChannelType: 3
+  - ChannelType: 3
     Address: ui/Button_Click
     VolumeScale: 1
-  DebugLogging: 1
+  DebugLogging: 0

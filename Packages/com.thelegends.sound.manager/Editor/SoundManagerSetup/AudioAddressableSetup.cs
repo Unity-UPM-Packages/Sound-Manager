@@ -154,7 +154,7 @@ namespace com.thelegends.sound.manager.Editor
                     entry.address = key;
                     
                     // Add to our list of sound addresses
-                    soundAddresses.Add(new SoundAddress(key, channelType, key));
+                    soundAddresses.Add(new SoundAddress(channelType, key));
                     
                     Debug.Log($"Added {key} to Addressables");
                 }
