@@ -377,20 +377,52 @@ namespace com.thelegends.sound.manager.Editor
                 return;
             }
             
-            // Create new GameObject with SoundManager
-            GameObject go = new GameObject("SoundManager");
-            SoundManager manager = go.AddComponent<SoundManager>();
+            // Try to find the prefab in the package
+            string packagePrefabPath = "Packages/com.thelegends.sound.manager/Runtime/Prefab/SoundManager.prefab";
+            GameObject prefab = AssetDatabase.LoadAssetAtPath<GameObject>(packagePrefabPath);
             
-            // Set up references
-            SerializedObject so = new SerializedObject(manager);
-            so.FindProperty("_audioMixer").objectReferenceValue = _audioMixer;
-            so.FindProperty("_settings").objectReferenceValue = _settings;
-            so.ApplyModifiedProperties();
-            
-            Selection.activeGameObject = go;
-            EditorGUIUtility.PingObject(go);
-            
-            Debug.Log("Created SoundManager GameObject in the current scene");
+            if (prefab == null)
+            {
+                Debug.LogWarning("SoundManager prefab not found at path: " + packagePrefabPath);
+                
+                // Fall back to creating new GameObject if prefab not found
+                GameObject go = new GameObject("SoundManager");
+                SoundManager manager = go.AddComponent<SoundManager>();
+                
+                // Set up references
+                SerializedObject so = new SerializedObject(manager);
+                so.FindProperty("_audioMixer").objectReferenceValue = _audioMixer;
+                so.FindProperty("_settings").objectReferenceValue = _settings;
+                so.ApplyModifiedProperties();
+                
+                Selection.activeGameObject = go;
+                EditorGUIUtility.PingObject(go);
+                
+                Debug.Log("Created SoundManager GameObject in the current scene (prefab not found, using default creation)");
+            }
+            else
+            {
+                // Instantiate prefab
+                GameObject instance = PrefabUtility.InstantiatePrefab(prefab) as GameObject;
+                
+                // Set up references on the instantiated prefab
+                SoundManager manager = instance.GetComponent<SoundManager>();
+                if (manager != null)
+                {
+                    SerializedObject so = new SerializedObject(manager);
+                    
+                    // Luôn cập nhật các tham chiếu từ cửa sổ thiết lập
+                    // thay vì kiểm tra thuộc tính không tồn tại
+                    so.FindProperty("_audioMixer").objectReferenceValue = _audioMixer;
+                    so.FindProperty("_settings").objectReferenceValue = _settings;
+                    so.ApplyModifiedProperties();
+                    
+                    Selection.activeGameObject = instance;
+                    EditorGUIUtility.PingObject(instance);
+                    
+                    Debug.Log("Created SoundManager from prefab in the current scene");
+                }
+            }
         }
     }
 }
