@@ -1,8 +1,11 @@
 {
-    "name": "com.thelegends.sound.manager.Editor",
+    "name": "com.thelegends.sound.manager.editor",
     "rootNamespace": "com.thelegends.sound.manager.Editor",
     "references": [
-        "com.thelegends.sound.manager"
+        "com.thelegends.sound.manager",
+        "Unity.Addressables",
+        "Unity.Addressables.Editor",
+        "com.thelegends.unity.patterns"
     ],
     "includePlatforms": [
         "Editor"

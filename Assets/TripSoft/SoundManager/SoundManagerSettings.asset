@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5171e606ae530840b673adb6e648dfd, type: 3}
+  m_Name: SoundManagerSettings
+  m_EditorClassIdentifier: 
+  AudioMixer: {fileID: 24100000, guid: b47cb39d6ddf4bc4a87b4a0b2bb46b3d, type: 2}
+  InitialPoolSize: 10
+  DefaultMasterVolume: 1
+  DefaultMusicVolume: 0.8
+  DefaultVfxVolume: 1
+  DefaultUIVolume: 0.7
+  MaxConcurrentSounds: 32
+  PreloadAddressables: 0
+  SoundAddresses:
+  - Key: music/GamePlayMusic
+    ChannelType: 1
+    Address: music/GamePlayMusic
+    VolumeScale: 1
+  - Key: music/MainMenu
+    ChannelType: 1
+    Address: music/MainMenu
+    VolumeScale: 1
+  - Key: vfx/PunchSFX
+    ChannelType: 2
+    Address: vfx/PunchSFX
+    VolumeScale: 1
+  - Key: ui/Button_Click
+    ChannelType: 3
+    Address: ui/Button_Click
+    VolumeScale: 1
+  DebugLogging: 1
