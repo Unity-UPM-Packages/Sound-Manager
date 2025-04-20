@@ -13,6 +13,18 @@ namespace com.thelegends.sound.manager
         public const string PREFS_VFX_VOLUME = "SoundManager_VfxVolume";
         public const string PREFS_UI_VOLUME = "SoundManager_UIVolume";
         
+        // PlayerPrefs keys for mute states
+        public const string PREFS_MASTER_MUTED = "SoundManager_MasterMuted";
+        public const string PREFS_MUSIC_MUTED = "SoundManager_MusicMuted";
+        public const string PREFS_VFX_MUTED = "SoundManager_VfxMuted";
+        public const string PREFS_UI_MUTED = "SoundManager_UIMuted";
+        
+        // PlayerPrefs keys for pre-mute volume values
+        public const string PREFS_MASTER_PREMUTE = "SoundManager_MasterPreMute";
+        public const string PREFS_MUSIC_PREMUTE = "SoundManager_MusicPreMute";
+        public const string PREFS_VFX_PREMUTE = "SoundManager_VfxPreMute";
+        public const string PREFS_UI_PREMUTE = "SoundManager_UIPreMute";
+        
         // AudioMixer parameter names
         public const string MIXER_MASTER_VOLUME = "MasterVolume";
         public const string MIXER_MUSIC_VOLUME = "MusicVolume";
@@ -67,6 +79,36 @@ namespace com.thelegends.sound.manager
                 case AudioChannelType.Vfx: return GROUP_VFX;
                 case AudioChannelType.UI: return GROUP_UI;
                 default: return GROUP_MASTER;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the PlayerPrefs key for mute state of a specific channel
+        /// </summary>
+        public static string GetMuteStateKey(AudioChannelType channelType)
+        {
+            switch (channelType)
+            {
+                case AudioChannelType.Master: return PREFS_MASTER_MUTED;
+                case AudioChannelType.Music: return PREFS_MUSIC_MUTED;
+                case AudioChannelType.Vfx: return PREFS_VFX_MUTED;
+                case AudioChannelType.UI: return PREFS_UI_MUTED;
+                default: return PREFS_MASTER_MUTED;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the PlayerPrefs key for pre-mute volume of a specific channel
+        /// </summary>
+        public static string GetPreMuteVolumeKey(AudioChannelType channelType)
+        {
+            switch (channelType)
+            {
+                case AudioChannelType.Master: return PREFS_MASTER_PREMUTE;
+                case AudioChannelType.Music: return PREFS_MUSIC_PREMUTE;
+                case AudioChannelType.Vfx: return PREFS_VFX_PREMUTE;
+                case AudioChannelType.UI: return PREFS_UI_PREMUTE;
+                default: return PREFS_MASTER_PREMUTE;
             }
         }
     }

@@ -13,6 +13,7 @@ namespace com.thelegends.sound.manager
         private readonly AudioMixer _audioMixer;
         private readonly Dictionary<AudioChannelType, AudioMixerGroup> _mixerGroups;
         private readonly Dictionary<AudioChannelType, float> _volumeCache = new Dictionary<AudioChannelType, float>();
+        private readonly Dictionary<AudioChannelType, float> _preMuteVolumes = new Dictionary<AudioChannelType, float>();
         
         /// <summary>
         /// Creates a new AudioMixerController
@@ -30,6 +31,40 @@ namespace com.thelegends.sound.manager
             foreach (AudioChannelType channelType in Enum.GetValues(typeof(AudioChannelType)))
             {
                 _volumeCache[channelType] = GetVolumeFromMixer(channelType);
+                
+                // Restore mute states and pre-mute volumes from PlayerPrefs
+                RestoreMuteState(channelType);
+            }
+        }
+        
+        /// <summary>
+        /// Restores mute state and pre-mute volume from PlayerPrefs
+        /// </summary>
+        /// <param name="channelType">The channel to restore</param>
+        private void RestoreMuteState(AudioChannelType channelType)
+        {
+            string muteStateKey = AudioConstants.GetMuteStateKey(channelType);
+            string preMuteKey = AudioConstants.GetPreMuteVolumeKey(channelType);
+            
+            // Check if channel was muted
+            if (PlayerPrefs.HasKey(muteStateKey) && PlayerPrefs.GetInt(muteStateKey) == 1)
+            {
+                // Channel was muted, check if we have saved pre-mute volume
+                if (PlayerPrefs.HasKey(preMuteKey))
+                {
+                    float preMuteVolume = PlayerPrefs.GetFloat(preMuteKey);
+                    
+                    // Store in memory for later use when unmuting
+                    _preMuteVolumes[channelType] = preMuteVolume;
+                    
+                    // Make sure the channel is actually muted (volume set to 0)
+                    // We use base SetVolume to avoid recursive setting
+                    float currentVol = GetVolume(channelType);
+                    if (currentVol >= 0.01f)
+                    {
+                        SetVolume(channelType, 0f);
+                    }
+                }
             }
         }
         
@@ -86,6 +121,46 @@ namespace com.thelegends.sound.manager
         {
             // Clamp volume between 0 and 1
             volume = Mathf.Clamp01(volume);
+            
+            // Get current volume before making changes
+            float currentVolume = GetVolume(channelType);
+            
+            // Handle special cases for mute/unmute through direct volume changes
+            if (currentVolume < 0.01f && volume >= 0.01f)
+            {
+                // Case: Unmuting through direct volume change
+                // Remove any stored pre-mute volume since we're explicitly setting a new value
+                _preMuteVolumes.Remove(channelType);
+                
+                // Also remove from PlayerPrefs
+                PlayerPrefs.DeleteKey(AudioConstants.GetPreMuteVolumeKey(channelType));
+                PlayerPrefs.SetInt(AudioConstants.GetMuteStateKey(channelType), 0);
+            }
+            else if (currentVolume >= 0.01f && volume < 0.01f)
+            {
+                // Case: Muting through direct volume change
+                // Store current volume before muting (if not already stored)
+                if (!_preMuteVolumes.ContainsKey(channelType))
+                {
+                    _preMuteVolumes[channelType] = currentVolume;
+                    
+                    // Also store in PlayerPrefs
+                    PlayerPrefs.SetFloat(AudioConstants.GetPreMuteVolumeKey(channelType), currentVolume);
+                    PlayerPrefs.SetInt(AudioConstants.GetMuteStateKey(channelType), 1);
+                }
+            }
+            else if (volume >= 0.01f)
+            {
+                // Case: Changing volume while unmuted
+                // Update pre-mute volume if there's one stored (for consistency)
+                if (_preMuteVolumes.ContainsKey(channelType))
+                {
+                    _preMuteVolumes[channelType] = volume;
+                    
+                    // Also update in PlayerPrefs
+                    PlayerPrefs.SetFloat(AudioConstants.GetPreMuteVolumeKey(channelType), volume);
+                }
+            }
             
             // Cache the linear volume
             _volumeCache[channelType] = volume;
@@ -160,17 +235,56 @@ namespace com.thelegends.sound.manager
         {
             float currentVolume = GetVolume(channelType);
             
-            // If already muted (or very low), restore to 1.0
+            // If already muted (volume near zero), restore to previous volume
             if (currentVolume < 0.01f)
             {
-                SetVolume(channelType, 1f);
-                return false;
+                // Get the volume value before mute, default to 1 if not found
+                float previousVolume = 1f;
+                
+                // First check the dictionary in memory
+                if (_preMuteVolumes.TryGetValue(channelType, out float savedVolume))
+                {
+                    previousVolume = savedVolume;
+                    // Remove the saved value after using it
+                    _preMuteVolumes.Remove(channelType);
+                }
+                // If not in memory, check PlayerPrefs
+                else
+                {
+                    string preMuteKey = AudioConstants.GetPreMuteVolumeKey(channelType);
+                    if (PlayerPrefs.HasKey(preMuteKey))
+                    {
+                        previousVolume = PlayerPrefs.GetFloat(preMuteKey);
+                    }
+                }
+                
+                // Ensure volume is valid (not too small)
+                previousVolume = Mathf.Max(0.01f, previousVolume);
+                
+                // Apply the previous volume
+                SetVolume(channelType, previousVolume);
+                
+                // Update persistence - not muted anymore
+                PlayerPrefs.SetInt(AudioConstants.GetMuteStateKey(channelType), 0);
+                PlayerPrefs.DeleteKey(AudioConstants.GetPreMuteVolumeKey(channelType));
+                PlayerPrefs.Save();
+                
+                return false; // Unmuted
             }
-            // Otherwise mute
+            // If not muted, save current volume and set to 0
             else
             {
+                // Save current volume value before muting
+                _preMuteVolumes[channelType] = currentVolume;
+                
+                // Also save to PlayerPrefs for persistence
+                PlayerPrefs.SetFloat(AudioConstants.GetPreMuteVolumeKey(channelType), currentVolume);
+                PlayerPrefs.SetInt(AudioConstants.GetMuteStateKey(channelType), 1);
+                PlayerPrefs.Save();
+                
+                // Set volume to 0 to mute
                 SetVolume(channelType, 0f);
-                return true;
+                return true; // Muted
             }
         }
     }
