@@ -1542,7 +1542,6 @@ GameObject:
   - component: {fileID: 772532009}
   - component: {fileID: 772532008}
   - component: {fileID: 772532007}
-  - component: {fileID: 772532006}
   - component: {fileID: 772532011}
   m_Layer: 5
   m_Name: Canvas
@@ -1551,18 +1550,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &772532006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 772532005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d139fb828136054982c78d42c359205, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &772532007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5082,6 +5069,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1190684571634225830, guid: 0fb03e83da6ca984f8637a0d6e479b9a, type: 3}
+      propertyPath: _settings
+      value: 
+      objectReference: {fileID: 11400000, guid: 6a9326e8cfe65304487f6a97dca36354, type: 2}
+    - target: {fileID: 1190684571634225830, guid: 0fb03e83da6ca984f8637a0d6e479b9a, type: 3}
+      propertyPath: _audioMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: b47cb39d6ddf4bc4a87b4a0b2bb46b3d, type: 2}
     - target: {fileID: 6328324748947613550, guid: 0fb03e83da6ca984f8637a0d6e479b9a, type: 3}
       propertyPath: m_Name
       value: SoundManager
