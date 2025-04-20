@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TheLegends.Base.UnitySingleton;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -10,7 +11,7 @@ namespace com.thelegends.sound.manager
     /// Main SoundManager for handling all audio playback and management.
     /// Uses Addressables for audio loading and AudioMixer for audio routing.
     /// </summary>
-    public class SoundManager : MonoBehaviour
+    public class SoundManager : PersistentMonoSingleton<SoundManager>
     {
         private static SoundManager _instance;
         
@@ -52,10 +53,6 @@ namespace com.thelegends.sound.manager
         /// </summary>
         public event Action<string, AudioChannelType> OnSoundStopped;
         
-        /// <summary>
-        /// Settings used by the SoundManager
-        /// </summary>
-        public SoundManagerSettings Settings => _settings;
         
         /// <summary>
         /// Whether the SoundManager is initialized

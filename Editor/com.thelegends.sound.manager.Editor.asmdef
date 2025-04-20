@@ -4,7 +4,8 @@
     "references": [
         "com.thelegends.sound.manager",
         "Unity.Addressables",
-        "Unity.Addressables.Editor"
+        "Unity.Addressables.Editor",
+        "com.thelegends.unity.patterns"
     ],
     "includePlatforms": [
         "Editor"

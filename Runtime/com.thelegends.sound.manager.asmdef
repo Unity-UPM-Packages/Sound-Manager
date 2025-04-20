@@ -3,7 +3,8 @@
     "rootNamespace": "com.thelegends.sound.manager",
     "references": [
         "Unity.Addressables",
-        "Unity.ResourceManager"
+        "Unity.ResourceManager",
+        "com.thelegends.unity.patterns"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
