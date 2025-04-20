@@ -115,6 +115,8 @@ sysinfo.txt
 *.apk
 *.aab
 *.unitypackage
+# Ngoại lệ cho Sample unitypackage
+!Packages/com.thelegends.sound.manager/Samples~/**/*.unitypackage
 
 # Crashlytics generated file
 crashlytics-build.properties
