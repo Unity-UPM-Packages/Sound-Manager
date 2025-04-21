@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/Unity-UPM-Packages/Sound-Manager/compare/v1.0.0...v1.0.1) (2025-04-21)
+
+
+### Bug Fixes
+
+* remove duplicate file ([7462cdd](https://github.com/Unity-UPM-Packages/Sound-Manager/commit/7462cdd2d900501c877de9172bb7c545404534c6))
+* sperate UI controller + improve demo ([48b9d39](https://github.com/Unity-UPM-Packages/Sound-Manager/commit/48b9d39c234ba8c8212bbe789a374dc968bd81a7))
+
 # 1.0.0 (2025-04-20)
 
 
