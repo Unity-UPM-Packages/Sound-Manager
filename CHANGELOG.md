@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/Unity-UPM-Packages/Sound-Manager/compare/v1.0.1...v1.0.2) (2025-04-21)
+
+
+### Bug Fixes
+
+* update template AudioMixer ([fa41f1c](https://github.com/Unity-UPM-Packages/Sound-Manager/commit/fa41f1cd0f9de649034f403894def4dae39a17b3))
+
 ## [1.0.1](https://github.com/Unity-UPM-Packages/Sound-Manager/compare/v1.0.0...v1.0.1) (2025-04-21)
 
 

@@ -3,7 +3,7 @@
   "displayName": "Sound Manager",
   "description": "Sound Manager used for Unity3D.",
   "keywords": [],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "unity": "2021.3",
   "documentationUrl": "https://github.com/Unity-UPM-Packages/Sound-Manager#documentation",
   "changelogUrl": "https://github.com/Unity-UPM-Packages/Sound-Manager/releases",
