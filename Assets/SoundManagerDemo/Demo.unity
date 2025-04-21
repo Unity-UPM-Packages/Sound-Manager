@@ -1322,7 +1322,7 @@ GameObject:
   - component: {fileID: 661338922}
   - component: {fileID: 661338923}
   m_Layer: 5
-  m_Name: Vfx
+  m_Name: Sfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1543,6 +1543,7 @@ GameObject:
   - component: {fileID: 772532008}
   - component: {fileID: 772532007}
   - component: {fileID: 772532011}
+  - component: {fileID: 772532012}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1653,6 +1654,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 737a67d499dd4ce4cb140a06b44b2d73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &772532012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 772532005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42da94553503fbc479be5284003cc9a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   masterVolumeSlider: {fileID: 1107309924}
@@ -3688,7 +3701,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Vfx
+  m_Text: Sfx
 --- !u!222 &1369108531
 CanvasRenderer:
   m_ObjectHideFlags: 0
