@@ -12,7 +12,7 @@ namespace com.thelegends.sound.manager.Editor
     public static class AudioMixerSetup
     {
         private const string MixerPath = "Assets/TripSoft/SoundManager/MainAudioMixer.mixer";
-        private const string MixerTemplatePath = "Assets/TripSoft/SoundManager/Template/MixerTemplate.mixer";
+        private const string MixerTemplatePath = "Packages/com.thelegends.sound.manager/Editor/Template/MixerTemplate.mixer";
         
         // Parameter names
         private const string MasterVolumeParam = "MasterVolume";
@@ -55,10 +55,35 @@ namespace com.thelegends.sound.manager.Editor
                 AssetDatabase.CreateFolder(parentFolder, folderName);
             }
             
-            // AudioMixer cannot be created directly via code with Unity's public API
-            // The optimal approach is to create it in the Editor and copy from a template
+            // Check if template mixer exists
+            AudioMixer templateMixer = AssetDatabase.LoadAssetAtPath<AudioMixer>(MixerTemplatePath);
+            if (templateMixer != null)
+            {
+                // Copy template mixer to destination
+                if (AssetDatabase.CopyAsset(MixerTemplatePath, MixerPath))
+                {
+                    AssetDatabase.Refresh();
+                    
+                    // Load the newly created mixer from template
+                    mixer = AssetDatabase.LoadAssetAtPath<AudioMixer>(MixerPath);
+                    if (mixer != null)
+                    {
+                        Debug.Log($"Created AudioMixer from template at {MixerPath}");
+                        return mixer;
+                    }
+                }
+                else
+                {
+                    Debug.LogError($"Failed to copy template mixer from {MixerTemplatePath} to {MixerPath}");
+                }
+            }
+            else 
+            {
+                Debug.LogError($"Template mixer not found at {MixerTemplatePath}. Make sure it exists in the package.");
+            }
             
-            // Create mixer by copying from template or creating an empty mixer through menu
+            // Fallback to original method if template approach fails
+            Debug.LogWarning("Template approach failed, falling back to creating mixer through Unity menu");
             if (!CreateMixerAsset())
             {
                 Debug.LogError("Failed to create AudioMixer asset. Please create one manually in Unity Editor.");
@@ -194,7 +219,6 @@ namespace com.thelegends.sound.manager.Editor
             }
             
             // Get SerializedObject of mixer to add group
-            SerializedObject mixerSerializedObject = new SerializedObject(mixer);
             
             // Depending on Unity version, AudioMixer structure may differ
             // Therefore, we need to create groups by calling functions through Editor API

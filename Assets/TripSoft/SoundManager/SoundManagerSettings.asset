@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5171e606ae530840b673adb6e648dfd, type: 3}
   m_Name: SoundManagerSettings
   m_EditorClassIdentifier: 
-  AudioMixer: {fileID: 24100000, guid: b47cb39d6ddf4bc4a87b4a0b2bb46b3d, type: 2}
+  AudioMixer: {fileID: 24100000, guid: b72096dbe6cfff24694090442fc31b06, type: 2}
   InitialPoolSize: 10
   DefaultMasterVolume: 1
   DefaultMusicVolume: 0.8
