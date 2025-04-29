@@ -4,7 +4,8 @@
     "references": [
         "Unity.Addressables",
         "Unity.ResourceManager",
-        "com.thelegends.unity.patterns"
+        "com.thelegends.unity.patterns",
+        "com.thelegends.unity.pooling"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

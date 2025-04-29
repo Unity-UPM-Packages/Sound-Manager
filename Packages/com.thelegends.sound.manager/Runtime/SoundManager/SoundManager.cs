@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TheLegends.Base.UnitySingleton;
 using UnityEngine;
 using UnityEngine.Audio;
+using com.thelegends.unity.pooling;
 
 namespace com.thelegends.sound.manager
 {
@@ -18,7 +19,7 @@ namespace com.thelegends.sound.manager
         
         private AudioMixerController _mixerController;
         private AudioAddressableLoader _addressableLoader;
-        private Dictionary<AudioChannelType, AudioPlayerPool> _playerPools;
+        private Dictionary<AudioChannelType, AudioPlayerPoolAdapter> _playerPools;
         private Dictionary<string, string> _customSoundIds = new Dictionary<string, string>();
         private int _soundIdCounter = 0;
         private bool _isInitialized = false;
@@ -61,7 +62,7 @@ namespace com.thelegends.sound.manager
             
             _mixerController = new AudioMixerController(_audioMixer);
             _addressableLoader = new AudioAddressableLoader(settings.SoundAddresses);
-            _playerPools = new Dictionary<AudioChannelType, AudioPlayerPool>();
+            _playerPools = new Dictionary<AudioChannelType, AudioPlayerPoolAdapter>();
             
             // Create a GameObject to contain all pool objects
             Transform poolsContainer = new GameObject("AudioPools").transform;
@@ -82,7 +83,7 @@ namespace com.thelegends.sound.manager
                     Transform poolParent = new GameObject($"Pool_{channelType}").transform;
                     poolParent.SetParent(poolsContainer);
                     
-                    _playerPools[channelType] = new AudioPlayerPool(
+                    _playerPools[channelType] = new AudioPlayerPoolAdapter(
                         settings.InitialPoolSize, 
                         poolParent, 
                         mixerGroup, 
@@ -217,7 +218,7 @@ namespace com.thelegends.sound.manager
                     return;
                 }
                 
-                if (_playerPools.TryGetValue(channelType, out AudioPlayerPool pool))
+                if (_playerPools.TryGetValue(channelType, out AudioPlayerPoolAdapter pool))
                 {
                     AudioPlayer player = pool.Get(soundId);
                     
@@ -288,7 +289,7 @@ namespace com.thelegends.sound.manager
                     return;
                 }
                 
-                if (_playerPools.TryGetValue(channelType, out AudioPlayerPool pool))
+                if (_playerPools.TryGetValue(channelType, out AudioPlayerPoolAdapter pool))
                 {
                     string soundId = GenerateSoundId();
                     AudioPlayer player = pool.Get(soundId);
@@ -305,7 +306,7 @@ namespace com.thelegends.sound.manager
         /// <summary>
         /// Coroutine to release a player after a delay
         /// </summary>
-        private IEnumerator ReleaseAfterDelay(AudioPlayerPool pool, AudioPlayer player, float delay)
+        private IEnumerator ReleaseAfterDelay(AudioPlayerPoolAdapter pool, AudioPlayer player, float delay)
         {
             yield return new WaitForSeconds(delay);
             
@@ -518,7 +519,7 @@ namespace com.thelegends.sound.manager
         /// <param name="channelType">Channel type to stop</param>
         public void StopChannel(AudioChannelType channelType)
         {
-            if (!_playerPools.TryGetValue(channelType, out AudioPlayerPool pool))
+            if (!_playerPools.TryGetValue(channelType, out AudioPlayerPoolAdapter pool))
                 return;
                 
             if (channelType == AudioChannelType.Music)
